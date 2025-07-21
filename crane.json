@@ -1,0 +1,246 @@
+{
+  "users": [
+    {
+      "id": "OP-1001",
+      "name": "John Smith",
+      "email": "john.smith@example.com",
+      "password": "$2a$10$N9qo8uLOickgx2ZMRZoMy.MrYVJ1YQ7qP3yQw6K/7XUZJz5JQ6BqO",
+      "role": "operator",
+      "lastLogin": "2023-07-15T08:30:45Z",
+      "createdAt": "2023-01-10T14:22:10Z"
+    },
+    {
+      "id": "OP-1002",
+      "name": "Sarah Johnson",
+      "email": "sarah.j@example.com",
+      "password": "$2a$10$N9qo8uLOickgx2ZMRZoMy.MrYVJ1YQ7qP3yQw6K/7XUZJz5JQ6BqO",
+      "role": "supervisor",
+      "lastLogin": "2023-07-14T16:45:22Z",
+      "createdAt": "2023-02-15T09:10:33Z"
+    }
+  ],
+  
+  "craneModels": [
+    {
+      "id": "ZX-5000",
+      "name": "Zoomlift ZX-5000",
+      "manufacturer": "Zoomlift Inc.",
+      "maxCapacity": "5000 kg",
+      "year": 2020,
+      "maintenanceInterval": {
+        "daily": true,
+        "weekly": true,
+        "monthly": true
+      }
+    },
+    {
+      "id": "HIAB-T013",
+      "name": "HIAB T-HiDuo 013",
+      "manufacturer": "HIAB",
+      "maxCapacity": "13000 kg",
+      "year": 2021,
+      "maintenanceInterval": {
+        "daily": true,
+        "weekly": true,
+        "monthly": true
+      }
+    },
+    {
+      "id": "LTM-1100",
+      "name": "Liebherr LTM 1100",
+      "manufacturer": "Liebherr",
+      "maxCapacity": "100000 kg",
+      "year": 2019,
+      "maintenanceInterval": {
+        "daily": true,
+        "weekly": true,
+        "monthly": true
+      }
+    }
+  ],
+  
+  "errorCodes": [
+    {
+      "model": "ZX-5000",
+      "code": "E003",
+      "title": "Hydraulic Pressure Low",
+      "description": "The hydraulic system pressure has dropped below the minimum threshold. This could indicate a leak, pump failure, or blocked filter.",
+      "severity": "High",
+      "category": "hydraulic",
+      "actions": [
+        "Check hydraulic fluid level and top up if necessary",
+        "Inspect for visible leaks in hydraulic lines",
+        "Check hydraulic pump operation",
+        "Replace hydraulic filter if clogged"
+      ],
+      "precautions": [
+        "Do not operate crane until issue is resolved",
+        "Relieve hydraulic pressure before inspection",
+        "Use proper PPE when handling hydraulic fluid"
+      ],
+      "createdAt": "2022-05-10T00:00:00Z"
+    },
+    {
+      "model": "ZX-5000",
+      "code": "F-23",
+      "title": "Overload Warning",
+      "description": "The crane has detected a load that exceeds the rated capacity for the current configuration.",
+      "severity": "Critical",
+      "category": "safety",
+      "actions": [
+        "Immediately lower the load to a safe position",
+        "Verify load weight and crane configuration",
+        "Check load moment indicator calibration",
+        "Inspect boom and outrigger sensors"
+      ],
+      "precautions": [
+        "Do not attempt to lift or move load",
+        "Keep personnel clear of load area",
+        "Follow emergency procedures if instability is detected"
+      ],
+      "createdAt": "2022-03-15T00:00:00Z"
+    },
+    {
+      "model": "HIAB-T013",
+      "code": "L045",
+      "title": "Load Sensor Malfunction",
+      "description": "The load moment indicator system has detected an inconsistency in load sensor readings.",
+      "severity": "High",
+      "category": "electrical",
+      "actions": [
+        "Perform sensor calibration procedure",
+        "Check wiring connections to sensors",
+        "Inspect load cell for damage",
+        "Test system with known weights"
+      ],
+      "precautions": [
+        "Do not rely on load indicator until verified",
+        "Use extreme caution when lifting loads",
+        "Follow manual lifting capacity charts"
+      ],
+      "createdAt": "2022-07-22T00:00:00Z"
+    }
+  ],
+  
+  "maintenanceChecklists": {
+    "daily": [
+      {
+        "id": "daily-1",
+        "description": "Check hydraulic fluid levels",
+        "estimatedTime": "5 minutes",
+        "category": "hydraulic"
+      },
+      {
+        "id": "daily-2",
+        "description": "Inspect wire ropes for damage",
+        "estimatedTime": "10 minutes",
+        "category": "mechanical"
+      }
+    ],
+    "weekly": [
+      {
+        "id": "weekly-1",
+        "description": "Lubricate all pivot points",
+        "estimatedTime": "15 minutes",
+        "category": "mechanical"
+      },
+      {
+        "id": "weekly-2",
+        "description": "Inspect hydraulic hoses for leaks",
+        "estimatedTime": "20 minutes",
+        "category": "hydraulic"
+      }
+    ],
+    "monthly": [
+      {
+        "id": "monthly-1",
+        "description": "Perform full function test",
+        "estimatedTime": "30 minutes",
+        "category": "operational"
+      },
+      {
+        "id": "monthly-2",
+        "description": "Inspect structural components",
+        "estimatedTime": "45 minutes",
+        "category": "mechanical"
+      }
+    ]
+  },
+  
+  "reportedIssues": [
+    {
+      "id": "ISS-2023-001",
+      "model": "ZX-5000",
+      "code": "E003",
+      "reportedBy": "OP-1001",
+      "type": "hydraulic",
+      "priority": "high",
+      "description": "Hydraulic pressure warning appeared during operation. Fluid level seems normal but pressure drops under load.",
+      "status": "open",
+      "createdAt": "2023-07-10T14:30:22Z",
+      "updatedAt": "2023-07-10T14:30:22Z"
+    },
+    {
+      "id": "ISS-2023-002",
+      "model": "HIAB-T013",
+      "code": "L045",
+      "reportedBy": "OP-1002",
+      "type": "electrical",
+      "priority": "medium",
+      "description": "Load sensor gives inconsistent readings when lifting near capacity.",
+      "status": "in-progress",
+      "createdAt": "2023-07-12T09:15:33Z",
+      "updatedAt": "2023-07-14T11:20:45Z"
+    }
+  ],
+  
+  "maintenanceLogs": [
+    {
+      "id": "MTN-2023-001",
+      "model": "ZX-5000",
+      "type": "daily",
+      "performedBy": "OP-1001",
+      "completedTasks": ["daily-1", "daily-2"],
+      "notes": "All daily checks completed successfully",
+      "status": "completed",
+      "startedAt": "2023-07-15T08:00:00Z",
+      "completedAt": "2023-07-15T08:20:00Z"
+    },
+    {
+      "id": "MTN-2023-002",
+      "model": "HIAB-T013",
+      "type": "weekly",
+      "performedBy": "OP-1002",
+      "completedTasks": ["weekly-1"],
+      "notes": "Found minor leak in hydraulic hose - needs replacement",
+      "status": "partial",
+      "startedAt": "2023-07-14T10:00:00Z",
+      "completedAt": "2023-07-14T11:30:00Z"
+    }
+  ],
+  
+  "systemSettings": {
+    "emergencyContacts": [
+      {
+        "name": "Maintenance Supervisor",
+        "phone": "+1 555 123 4567",
+        "email": "supervisor@example.com"
+      },
+      {
+        "name": "Safety Officer",
+        "phone": "+1 555 987 6543",
+        "email": "safety@example.com"
+      }
+    ],
+    "defaultChecklist": {
+      "daily": true,
+      "weekly": true,
+      "monthly": true
+    },
+    "notificationSettings": {
+      "emailAlerts": true,
+      "pushAlerts": true,
+      "criticalOnly": false
+    }
+  }
+}

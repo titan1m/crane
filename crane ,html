@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Crane error detection tool for troubleshooting construction equipment." />
+  <meta property="og:title" content="Crane Diagnostic Tool" />
+  <meta property="og:description" content="Scan or enter crane error codes and get quick diagnostics." />
+  <title>Crane Error Detection App</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app">
+    <div id="homePage" class="glass-card show">
+      <div class="crane-logo" aria-hidden="true">
+        <div class="crane-tower"></div>
+        <div class="crane-cabin"></div>
+        <div class="crane-arm"></div>
+        <div class="crane-counterweight"></div>
+        <div class="crane-cable"></div>
+        <div class="crane-hook"></div>
+      </div>
+      <h1>🔧 Crane Diagnostic Tool</h1>
+      <p class="subtitle">Choose how you'd like to input the error code</p>
+      <button onclick="showPage('scanPage')">📷 Scan Error Code</button>
+      <button onclick="showPage('manualPage')">📝 Enter Manually</button>
+    </div>
+
+    <div id="manualPage" class="glass-card hidden">
+      <h1>📝 Manual Code Entry</h1>
+      <label for="model">Crane Model</label>
+      <input type="text" id="model" placeholder="e.g., ZX-5000" />
+      <label for="code">Error Code</label>
+      <input type="text" id="code" placeholder="e.g., F-23" />
+      <button onclick="detectError()">Check Error</button>
+      <div id="output" role="alert"></div>
+      <button onclick="showPage('homePage')">⬅ Back</button>
+    </div>
+
+    <div id="scanPage" class="glass-card hidden">
+      <h1>📷 Scan Crane Code</h1>
+      <video id="scanner" autoplay></video>
+      <canvas id="canvas" class="hidden"></canvas>
+      <p id="scanResult"></p>
+      <button onclick="stopScanner()">🛑 Stop Scan</button>
+      <button onclick="showPage('homePage')">⬅ Back</button>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
+  <script src="app.js" type="text/javascript"></script>
+</body>
+</html>
