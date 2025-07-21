@@ -1,0 +1,2556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crane Maintenance Assistant</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #4361ee;
+      --primary-dark: #3a56d4;
+      --primary-light: #ebf2ff;
+      --secondary: #f72585;
+      --accent: #4cc9f0;
+      --success: #4ade80;
+      --warning: #fbbf24;
+      --danger: #f87171;
+      --dark: #1e293b;
+      --darker: #0f172a;
+      --light: #f8fafc;
+      --gray-light: #e2e8f0;
+      --gray: #94a3b8;
+      --gray-dark: #64748b;
+      --glass: rgba(255, 255, 255, 0.08);
+      --glass-border: rgba(255, 255, 255, 0.15);
+      --card-bg: rgba(15, 23, 42, 0.7);
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.1);
+      --shadow-inset: inset 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+      --radius: 16px;
+      --radius-sm: 8p x;
+      --radius-lg: 24px;
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      --nav-width: 280px;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    }
+    
+    body {
+      background: linear-gradient(135deg, var(--darker), var(--dark));
+      color: var(--light);
+      min-height: 100vh;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    
+    /* Layout */
+    .app-layout {
+      display: flex;
+      min-height: 100vh;
+    }
+    
+    /* Navigation */
+    .app-nav {
+      width: var(--nav-width);
+      background: var(--card-bg);
+      border-right: 1px solid var(--glass-border);
+      padding: 20px 0;
+      position: fixed;
+      height: 100vh;
+      z-index: 100;
+      transition: var(--transition);
+      transform: translateX(0);
+    }
+    
+    .nav-collapsed .app-nav {
+      transform: translateX(calc(var(--nav-width) * -1));
+    }
+    
+    .nav-header {
+      padding: 0 20px 20px;
+      border-bottom: 1px solid var(--glass-border);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .app-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 20px;
+      font-weight: 700;
+      color: white;
+      text-decoration: none;
+    }
+    
+    .app-logo i {
+      color: var(--accent);
+      font-size: 24px;
+    }
+    
+    .nav-menu {
+      padding: 0 10px;
+    }
+    
+    .nav-item {
+      margin-bottom: 8px;
+    }
+    
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      border-radius: var(--radius-sm);
+      color: var(--gray);
+      text-decoration: none;
+      font-weight: 500;
+      transition: var(--transition);
+    }
+    
+    .nav-link:hover, .nav-link.active {
+      background: var(--primary);
+      color: white;
+    }
+    
+    .nav-link i {
+      width: 24px;
+      text-align: center;
+    }
+    
+    .nav-divider {
+      height: 1px;
+      background: var(--glass-border);
+      margin: 20px 0;
+    }
+    
+    /* Main Content */
+    .app-content {
+      flex: 1;
+      margin-left: var(--nav-width);
+      transition: var(--transition);
+      padding: 30px 0;
+    }
+    
+    .nav-collapsed .app-content {
+      margin-left: 0;
+    }
+    
+    /* Top Bar */
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--glass-border);
+    }
+    
+    .toggle-nav {
+      background: none;
+      border: none;
+      color: var(--gray);
+      font-size: 20px;
+      cursor: pointer;
+      display: none;
+      padding: 8px;
+      border-radius: 50%;
+      transition: var(--transition);
+    }
+    
+    .toggle-nav:hover {
+      background: var(--glass);
+      color: white;
+    }
+    
+    .user-menu {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: white;
+      cursor: pointer;
+    }
+    
+    .user-name {
+      font-weight: 500;
+    }
+    
+    .user-dropdown {
+      position: relative;
+    }
+    
+    .dropdown-menu {
+      position: absolute;
+      right: 0;
+      top: 50px;
+      background: var(--card-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-sm);
+      min-width: 200px;
+      box-shadow: var(--shadow-lg);
+      z-index: 10;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(10px);
+      transition: var(--transition);
+    }
+    
+    .dropdown-menu.show {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+    
+    .dropdown-item {
+      display: block;
+      padding: 12px 16px;
+      color: var(--light);
+      text-decoration: none;
+      transition: var(--transition);
+    }
+    
+    .dropdown-item:hover {
+      background: var(--glass);
+    }
+    
+    .dropdown-item i {
+      margin-right: 10px;
+      width: 20px;
+      text-align: center;
+    }
+    
+    /* Cards */
+    .card {
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-radius: var(--radius);
+      border: 1px solid var(--glass-border);
+      padding: 25px;
+      margin-bottom: 25px;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    
+    .card.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    .card.hidden {
+      display: none;
+    }
+    
+    .card-header {
+      display: flex;
+      justify-content:m space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid var(--glass-border);
+    }
+    
+    .card-title {
+      font-size: 20px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: white;
+    }
+    
+    .card-title i {
+      color: var(--accent);
+    }
+    
+    .card-actions {
+      display: flex;
+      gap: 10px;
+    }
+    
+    /* Buttons */
+    .btn {
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: var(--transition);
+      box-shadow: var(--shadow);
+      font-size: 14px;
+    }
+    
+    .btn:hover {
+      background-color: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .btn:active {
+      transform: translateY(0);
+    }
+    
+    .btn i {
+      font-size: 14px;
+    }
+    
+    .btn-sm {
+      padding: 8px 14px;
+      font-size: 13px;
+    }
+    
+    .btn-lg {
+      padding: 12px 24px;
+      font-size: 16px;
+    }
+    
+    .btn-block {
+      display: block;
+      width: 100%;
+    }
+    
+    .btn-group {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--glass-border);
+      color: var(--light);
+    }
+    
+    .btn-outline:hover {
+      background: var(--glass);
+      border-color: var(--primary);
+      color: white;
+    }
+    
+    .btn-success {
+      background-color: var(--success);
+    }
+    
+    .btn-success:hover {
+      background-color: #22c55e;
+    }
+    
+    .btn-warning {
+      background-color: var(--warning);
+      color: var(--dark);
+    }
+    
+    .btn-warning:hover {
+      background-color: #f59e0b;
+    }
+    
+    .btn-danger {
+      background-color: var(--danger);
+    }
+    
+    .btn-danger:hover {
+      background-color: #ef4444;
+    }
+    
+    .btn-secondary {
+      background-color: var(--secondary);
+    }
+    
+    .btn-secondary:hover {
+      background-color: #e11d8d;
+    }
+    
+    .btn-accent {
+      background-color: var(--accent);
+    }
+    
+    .btn-accent:hover {
+      background-color: #3bb6e3;
+    }
+    
+    /* Forms */
+    .form-group {
+      margin-bottom: 20px;
+    }
+    
+    .form-label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: var(--gray-light);
+      font-size: 14px;
+    }
+    
+    .form-control {
+      width: 100%;
+      padding: 12px 15px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--glass-border);
+      background: rgba(0, 0, 0, 0.3);
+      color: var(--light);
+      font-size: 15px;
+      transition: var(--transition);
+    }
+    
+    .form-control:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.3);
+      background: rgba(0, 0, 0, 0.4);
+    }
+    
+    textarea.form-control {
+      min-height: 120px;
+      resize: vertical;
+    }
+    
+    .form-check {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 15px;
+    }
+    
+    .form-check-input {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--primary);
+    }
+    
+    /* Messages */
+    .alert {
+      padding: 15px;
+      border-radius: var(--radius-sm);
+      margin-bottom: 20px;
+      display: none;
+      font-size: 14px;
+    }
+    
+    .alert.show {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .alert-danger {
+      background-color: rgba(239, 68, 68, 0.15);
+      border-left: 4px solid var(--danger);
+      color: #fca5a5;
+    }
+    
+    .alert-success {
+      background-color: rgba(34, 197, 94, 0.15);
+      border-left: 4px solid var(--success);
+      color: #86efac;
+    }
+    
+    .alert-warning {
+      background-color: rgba(245, 158, 11, 0.15);
+      border-left: 4px solid var(--warning);
+      color: #fcd34d;
+    }
+    
+    .alert-info {
+      background-color: rgba(56, 189, 248, 0.15);
+      border-left: 4px solid var(--accent);
+      color: #7dd3fc;
+    }
+    
+    /* Dashboard */
+    .grid {
+      display: grid;
+      gap: 20px;
+    }
+    
+    .grid-cols-1 {
+      grid-template-columns: repeat(1, 1fr);
+    }
+    
+    .grid-cols-2 {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .grid-cols-3 {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    
+    .grid-cols-4 {
+      grid-template-columns: repeat(4, 1fr);
+    }
+    
+    .stat-card {
+      background: linear-gradient(135deg, rgba(30, 41, 59, 0.7), rgba(15, 23, 42, 0.9));
+      border-radius: var(--radius);
+      padding: 20px;
+      transition: var(--transition);
+      border: 1px solid var(--glass-border);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: var(--primary);
+    }
+    
+    .stat-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 15px;
+      color: white;
+      font-size: 20px;
+    }
+    
+    .stat-icon.primary {
+      background: rgba(67, 97, 238, 0.2);
+      color: var(--primary);
+    }
+    
+    .stat-icon.warning {
+      background: rgba(245, 158, 11, 0.2);
+      color: var(--warning);
+    }
+    
+    .stat-icon.danger {
+      background: rgba(239, 68, 68, 0.2);
+      color: var(--danger);
+    }
+    
+    .stat-icon.success {
+      background: rgba(34, 197, 94, 0.2);
+      color: var(--success);
+    }
+    
+    .stat-value {
+      font-size: 28px;
+      font-weight: 700;
+      margin: 5px 0;
+      color: white;
+      font-feature-settings: 'tnum';
+    }
+    
+    .stat-label {
+      color: var(--gray);
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .stat-change {
+      font-size: 12px;
+      margin-top: 5px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    
+    .stat-change.positive {
+      color: var(--success);
+    }
+    
+    .stat-change.negative {
+      color: var(--danger);
+    }
+    
+    .chart-container {
+      height: 300px;
+      margin-bottom: 30px;
+      position: relative;
+    }
+    
+    /* Error List */
+    .error-item {
+      background: rgba(30, 41, 59, 0.5);
+      border-radius: var(--radius-sm);
+      padding: 15px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: var(--transition);
+      border-left: 4px solid var(--danger);
+    }
+    
+    .error-item:hover {
+      background: rgba(30, 41, 59, 0.7);
+      transform: translateX(5px);
+    }
+    
+    .error-item.resolved {
+      border-left-color: var(--success);
+      opacity: 0.7;
+    }
+    
+    .error-item .model {
+      font-weight: 600;
+      width: 150px;
+      color: white;
+    }
+    
+    .error-item .code {
+      flex: 1;
+      color: var(--accent);
+      font-family: 'Roboto Mono', monospace;
+    }
+    
+    .error-item .time {
+      color: var(--gray);
+      font-size: 13px;
+      min-width: 100px;
+      text-align: right;
+    }
+    
+    /* Scanner */
+    #video {
+      width: 100%;
+      border-radius: var(--radius);
+      margin-bottom: 20px;
+      display: none;
+      background: black;
+    }
+    
+    .scanner-frame {
+      position: relative;
+      margin-bottom: 20px;
+    }
+    
+    .scanner-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .scanner-box {
+      width: 250px;
+      height: 250px;
+      border: 3px solid var(--accent);
+      border-radius: var(--radius);
+      position: relative;
+      box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.7);
+    }
+    
+    .scanner-box::before, .scanner-box::after {
+      content: '';
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      border-color: var(--accent);
+      border-style: solid;
+      border-width: 0;
+    }
+    
+    .scanner-box::before {
+      top: 0;
+      left: 0;
+      border-top-width: 3px;
+      border-left-width: 3px;
+      border-top-left-radius: var(--radius-sm);
+    }
+    
+    .scanner-box::after {
+      top: 0;
+      right: 0;
+      border-top-width: 3px;
+      border-right-width: 3px;
+      border-top-right-radius: var(--radius-sm);
+    }
+    
+    .scanner-line {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: var(--accent);
+      animation: scan 2s infinite linear;
+      box-shadow: 0 0 10px var(--accent);
+    }
+    
+    @keyframes scan {
+      0% { top: 0; opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { top: 100%; opacity: 0; }
+    }
+    
+    .scanner-controls {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    
+    /* Error Details */
+    .detail-section {
+      background: rgba(30, 41, 59, 0.5);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    
+    .detail-section h3 {
+      margin-bottom: 15px;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 18px;
+    }
+    
+    .detail-list {
+      padding-left: 20px;
+    }
+    
+    .detail-list li {
+      margin-bottom: 10px;
+      position: relative;
+      padding-left: 25px;
+      color: var(--gray-light);
+    }
+    
+    .detail-list li:before {
+      content: "•";
+      color: var(--primary);
+      font-size: 24px;
+      position: absolute;
+      left: 0;
+      top: -5px;
+    }
+    
+    .severity-badge {
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    
+    .severity-critical {
+      background: rgba(239, 68, 68, 0.2);
+      color: var(--danger);
+    }
+    
+    .severity-high {
+      background: rgba(245, 158, 11, 0.2);
+      color: var(--warning);
+    }
+    
+    .severity-medium {
+      background: rgba(59, 130, 246, 0.2);
+      color: #60a5fa;
+    }
+    
+    .severity-low {
+      background: rgba(34, 197, 94, 0.2);
+      color: var(--success);
+    }
+    
+    /* Maintenance */
+    .tab-nav {
+      display: flex;
+      gap: 5px;
+      margin-bottom: 20px;
+      border-bottom: 1px solid var(--glass-border);
+      padding-bottom: 5px;
+    }
+    
+    .tab-button {
+      background: none;
+      border: none;
+      padding: 10px 20px;
+      border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+      color: var(--gray);
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
+      position: relative;
+    }
+    
+    .tab-button.active {
+      color: var(--light);
+    }
+    
+    .tab-button.active::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: var(--primary);
+      border-radius: 3px 3px 0 0;
+    }
+    
+    .checklist-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 16px;
+      margin-bottom: 8px;
+      background: rgba(30, 41, 59, 0.5);
+      border-radius: var(--radius-sm);
+      transition: var(--transition);
+      border: 1px solid var(--glass-border);
+    }
+    
+    .checklist-item:hover {
+      background: rgba(30, 41, 59, 0.7);
+      transform: translateX(5px);
+    }
+    
+    .checklist-item.completed {
+      background: rgba(34, 197, 94, 0.1);
+      border-color: rgba(34, 197, 94, 0.3);
+    }
+    
+    .checklist-item.completed label {
+      text-decoration: line-through;
+      color: var(--gray);
+    }
+    
+    .checklist-checkbox {
+      width: 20px;
+      height: 20px;
+      border-radius: 6px;
+      border: 2px solid var(--gray-dark);
+      appearance: none;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .checklist-checkbox:checked {
+      background: var(--success);
+      border-color: var(--success);
+    }
+    
+    .checklist-checkbox:checked::after {
+      content: '\f00c';
+      font-family: 'Font Awesome 6 Free';
+      font-weight: 900;
+      color: white;
+      font-size: 12px;
+    }
+    
+    .progress-container {
+      height: 8px;
+      background: rgba(30, 41, 59, 0.5);
+      border-radius: 4px;
+      margin: 20px 0;
+      overflow: hidden;
+      box-shadow: var(--shadow-inset);
+    }
+    
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      border-radius: 4px;
+      transition: width 0.5s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .progress-bar::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.2) 50%,
+        rgba(255, 255, 255, 0) 100%
+      );
+      animation: progressShine 2s infinite linear;
+    }
+    
+    @keyframes progressShine {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+    
+    .progress-text {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 5px;
+      font-size: 13px;
+      color: var(--gray);
+    }
+    
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--gray);
+    }
+    
+    .empty-state i {
+      font-size: 48px;
+      margin-bottom: 15px;
+      color: var(--gray-dark);
+    }
+    
+    .empty-state h3 {
+      margin-bottom: 10px;
+      color: var(--gray-light);
+    }
+    
+    /* Responsive */
+    @media (max-width: 1200px) {
+      .grid-cols-4 {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    
+    @media (max-width: 992px) {
+      .app-nav {
+        transform: translateX(calc(var(--nav-width) * -1));
+      }
+      
+      .nav-collapsed .app-nav {
+        transform: translateX(0);
+      }
+      
+      .app-content {
+        margin-left: 0;
+      }
+      
+      .toggle-nav {
+        display: block;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .grid-cols-3, .grid-cols-4 {
+        grid-template-columns: repeat(1, 1fr);
+      }
+      
+      .error-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+      }
+      
+      .error-item .model, .error-item .time {
+        width: auto;
+        text-align: left;
+      }
+    }
+    
+    @media (max-width: 576px) {
+      .btn-group {
+        flex-direction: column;
+      }
+      
+      .btn-group .btn {
+        width: 100%;
+      }
+      
+      .scanner-controls {
+        flex-direction: column;
+      }
+    }
+    
+    /* Animations */
+    @keyframes pulse {
+      0% { opacity: 0.6; }
+      50% { opacity: 1; }
+      100% { opacity: 0.6; }
+    }
+    
+    .pulse {
+      animation: pulse 1.5s infinite;
+    }
+    
+    /* Utility Classes */
+    .text-center {
+      text-align: center;
+    }
+    
+    .text-muted {
+      color: var(--gray);
+    }
+    
+    .mt-1 { margin-top: 4px; }
+    .mt-2 { margin-top: 8px; }
+    .mt-3 { margin-top: 12px; }
+    .mt-4 { margin-top: 16px; }
+    .mt-5 { margin-top: 20px; }
+    
+    .mb-1 { margin-bottom: 4px; }
+    .mb-2 { margin-bottom: 8px; }
+    .mb-3 { margin-bottom: 12px; }
+    .mb-4 { margin-bottom: 16px; }
+    .mb-5 { margin-bottom: 20px; }
+    
+    .hidden {
+      display: none !important;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-layout">
+    <!-- Navigation -->
+    <nav class="app-nav">
+      <div class="nav-header">
+        <a href="#" class="app-logo" onclick="showPage('homePage')">
+          <i class="fas fa-crane"></i>
+          <span>CRANE<span class="text-accent">AI</span></span>
+        </a>
+      </div>
+      
+      <div class="nav-menu">
+        <div class="nav-item">
+          <a href="#" class="nav-link active" onclick="showPage('dashboardPage')">
+            <i class="fas fa-tachometer-alt"></i>
+            <span>Dashboard</span>
+          </a>
+        </div>
+        <div class="nav-item">
+          <a href="#" class="nav-link" onclick="showPage('maintenancePage')">
+            <i class="fas fa-clipboard-check"></i>
+            <span>Maintenance</span>
+          </a>
+        </div>
+        <div class="nav-item">
+          <a href="#" class="nav-link" onclick="showPage('manualPage')">
+            <i class="fas fa-search"></i>
+            <span>Error Lookup</span>
+          </a>
+        </div>
+        <div class="nav-item">
+          <a href="#" class="nav-link" onclick="initScanner()">
+            <i class="fas fa-qrcode"></i>
+            <span>Scan Code</span>
+          </a>
+        </div>
+        
+        <div class="nav-divider"></div>
+        
+        <div class="nav-item">
+          <a href="#" class="nav-link" onclick="showPage('settingsPage')">
+            <i class="fas fa-cog"></i>
+            <span>Settings</span>
+          </a>
+        </div>
+        <div class="nav-item">
+          <a href="#" class="nav-link" onclick="logout()">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Logout</span>
+          </a>
+        </div>
+      </div>
+    </nav>
+    
+    <!-- Main Content -->
+    <main class="app-content">
+      <div class="container">
+        <!-- Top Bar -->
+        <div class="top-bar">
+          <button class="toggle-nav" onclick="toggleNav()">
+            <i class="fas fa-bars"></i>
+          </button>
+          
+          <div class="user-menu">
+            <div class="user-dropdown">
+              <div class="user-info" onclick="toggleDropdown()">
+                <span class="user-name" id="currentUserName">Operator</span>
+                <div class="user-avatar" id="userAvatar">OP</div>
+              </div>
+              
+              <div class="dropdown-menu" id="dropdownMenu">
+                <a href="#" class="dropdown-item" onclick="showPage('settingsPage')">
+                  <i class="fas fa-user"></i> Profile
+                </a>
+                <a href="#" class="dropdown-item" onclick="showPage('settingsPage')">
+                  <i class="fas fa-cog"></i> Settings
+                </a>
+                <div class="nav-divider"></div>
+                <a href="#" class="dropdown-item" onclick="logout()">
+                  <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Login Page -->
+        <div id="loginPage" class="card">
+          <div class="card-header">
+            <h2 class="card-title"><i class="fas fa-sign-in-alt"></i> Operator Login</h2>
+          </div>
+          
+          <div class="form-group">
+            <label for="username" class="form-label">Operator ID</label>
+            <input type="text" id="username" class="form-control" placeholder="Enter your operator ID">
+          </div>
+          
+          <div class="form-group">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" id="password" class="form-control" placeholder="Enter your password">
+          </div>
+          
+          <div class="form-group">
+            <div class="form-check">
+              <input type="checkbox" id="remember" class="form-check-input">
+              <label for="remember">Remember me</label>
+            </div>
+          </div>
+          
+          <div id="loginOutput" class="alert"></div>
+          
+          <button onclick="login()" class="btn btn-accent btn-block">
+            <i class="fas fa-unlock"></i> Login
+          </button>
+          
+          <div class="text-center mt-4 text-muted">
+            <a href="#" onclick="showPage('resetPage')" style="color: var(--gray);">Forgot password?</a>
+          </div>
+        </div>
+
+        <!-- Password Reset Page -->
+        <div id="resetPage" class="card hidden">
+          <div class="card-header">
+            <h2 class="card-title"><i class="fas fa-key"></i> Password Reset</h2>
+          </div>
+          
+          <div class="form-group">
+            <label for="resetEmail" class="form-label">Email Address</label>
+            <input type="email" id="resetEmail" class="form-control" placeholder="Enter your registered email">
+          </div>
+          
+          <div id="resetOutput" class="alert"></div>
+          
+          <button onclick="sendResetLink()" class="btn btn-accent btn-block">
+            <i class="fas fa-paper-plane"></i> Send Reset Link
+          </button>
+          
+          <button onclick="showPage('loginPage')" class="btn btn-outline btn-block mt-2">
+            <i class="fas fa-arrow-left"></i> Back to Login
+          </button>
+        </div>
+
+        <!-- Home Page -->
+        <div id="homePage" class="card hidden">
+          <div class="card-header">
+            <h2 class="card-title"><i class="fas fa-home"></i> Maintenance Dashboard</h2>
+          </div>
+          
+          <div class="btn-group">
+            <button onclick="showPage('dashboardPage')" class="btn btn-accent">
+              <i class="fas fa-tachometer-alt"></i> Dashboard
+            </button>
+            <button onclick="showPage('maintenancePage')" class="btn">
+              <i class="fas fa-clipboard-check"></i> Maintenance
+            </button>
+            <button onclick="showPage('manualPage')" class="btn">
+              <i class="fas fa-search"></i> Error Lookup
+            </button>
+            <button onclick="initScanner()" class="btn">
+              <i class="fas fa-qrcode"></i> Scan Code
+            </button>
+          </div>
+          
+          <div class="mt-5">
+            <button onclick="triggerEmergency()" class="btn btn-danger btn-block btn-lg">
+              <i class="fas fa-exclamation-triangle"></i> EMERGENCY STOP
+            </button>
+          </div>
+        </div>
+
+        <!-- Dashboard Page -->
+        <div id="dashboardPage" class="card hidden">
+          <div class="card-header">
+            <h2 class="card-title"><i class="fas fa-tachometer-alt"></i> Equipment Overview</h2>
+            <button onclick="showPage('homePage')" class="btn btn-outline">
+              <i class="fas fa-arrow-left"></i> Back
+            </button>
+          </div>
+          
+          <div class="grid grid-cols-4">
+            <div class="stat-card">
+              <div class="stat-icon primary">
+                <i class="fas fa-exclamation-circle"></i>
+              </div>
+              <div class="stat-value" id="totalErrors">24</div>
+              <div class="stat-label">Total Errors</div>
+              <div class="stat-change negative">
+                <i class="fas fa-arrow-up"></i> 12% from last month
+              </div>
+            </div>
+            
+            <div class="stat-card">
+              <div class="stat-icon danger">
+                <i class="fas fa-times-circle"></i>
+              </div>
+              <div class="stat-value" id="criticalErrors">5</div>
+              <div class="stat-label">Critical Errors</div>
+              <div class="stat-change positive">
+                <i class="fas fa-arrow-down"></i> 8% from last month
+              </div>
+            </div>
+            
+            <div class="stat-card">
+              <div class="stat-icon success">
+                <i class="fas fa-chart-line"></i>
+              </div>
+              <div class="stat-value" id="uptime">98.7%</div>
+              <div class="stat-label">Uptime</div>
+              <div class="stat-change positive">
+                <i class="fas fa-arrow-up"></i> 1.2% from last month
+              </div>
+            </div>
+            
+            <div class="stat-card">
+              <div class="stat-icon warning">
+                <i class="fas fa-tools"></i>
+              </div>
+              <div class="stat-value" id="maintenanceDue">3</div>
+              <div class="stat-label">Maintenance Due</div>
+              <div class="stat-change">
+                <i class="fas fa-equals"></i> Same as last month
+              </div>
+            </div>
+          </div>
+          
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title"><i class="fas fa-chart-bar"></i> Error Trends</h2>
+            </div>
+            <div class="chart-container">
+              <canvas id="errorChart"></canvas>
+            </div>
+          </div>
+          
+          <div class="card">
+            <div class="card-header">
+              <h2 class="card-title"><i class="fas fa-exclamation-circle"></i> Recent Errors</h2>
+              <button onclick="refreshErrors()" class="btn btn-outline btn-sm">
+                <i class="fas fa-sync-alt"></i> Refresh
+              </button>
+            </div>
+            
+            <div id="recentErrorsList"></div>
+            
+            <div class="text-center mt-3">
+              <button onclick="showPage('manualPage')" class="btn btn-outline">
+                <i class="fas fa-plus"></i> Report New Error
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Maintenance Page -->
+        <div id="maintenancePage" class="card hidden">
+          <div class="card-header">
+            <h2 class="card-title"><i class="fas fa-clipboard-check"></i> Maintenance Checklists</h2>
+            <button onclick="showPage('homePage')" class="btn btn-outline">
+              <i class="fas fa-arrow-left"></i> Back
+            </button>
+          </div>
+          
+          <div class="tab-nav">
+            <button class="tab-button active" onclick="switchMaintenanceTab('daily')">Daily</button>
+            <button class="tab-button" onclick="switchMaintenanceTab('weekly')">Weekly</button>
+            <button class="tab-button" onclick="switchMaintenanceTab('monthly')">Monthly</button>
+          </div>
+          
+          <div id="dailyChecklist" class="checklist-content">
+            <div class="progress-container">
+              <div class="progress-bar" id="dailyProgress" style="width: 30%;"></div>
+            </div>
+            <div class="progress-text">
+              <span>30% completed</span>
+              <span>3 of 10 tasks</span>
+            </div>
+            <div id="dailyChecklistItems"></div>
+          </div>
+          
+          <div id="weeklyChecklist" class="checklist-content hidden">
+            <div class="progress-container">
+              <div class="progress-bar" id="weeklyProgress" style="width: 15%;"></div>
+            </div>
+            <div class="progress-text">
+              <span>15% completed</span>
+              <span>2 of 12 tasks</span>
+            </div>
+            <div id="weeklyChecklistItems"></div>
+          </div>
+          
+          <div id="monthlyChecklist" class="checklist-content hidden">
+            <div class="progress-container">
+              <div class="progress-bar" id="monthlyProgress" style="width: 5%;"></div>
+            </div>
+            <div class="progress-text">
+              <span>5% completed</span>
+              <span>1 of 18 tasks</span>
+            </div>
+            <div id="monthlyChecklistItems"></div>
+          </div>
+          
+          <div class="mt-4">
+            <button onclick="completeAllTasks()" class="btn btn-success">
+              <i class="fas fa-check-double"></i> Complete All
+            </button>
+            <button onclick="generateReport()" class="btn btn-outline">
+              <i class="fas fa-file-export"></i> Generate Report
+            </button>
+          </div>
+        </div>
+
+        <!-- Manual Error Lookup Page -->
+        <div id="manualPage" class="card hidden">
+          <div class="card-header">
+            <h2 class="card-title"><i class="fas fa-search"></i> Error Code Lookup</h2>
+            <button onclick="showPage('homePage')" class="btn btn-outline">
+              <i class="fas fa-arrow-left"></i> Back
+            </button>
+          </div>
+          
+          <div class="form-group">
+            <label for="model" class="form-label">Crane Model</label>
+            <input type="text" id="model" class="form-control" placeholder="Enter crane model (e.g. ZX-5000)">
+          </div>
+          
+          <div class="form-group">
+            <label for="code" class="form-label">Error Code</label>
+            <input type="text" id="code" class="form-control" placeholder="Enter error code (e.g. E003)">
+          </div>
+          
+          <div id="output" class="alert"></div>
+          
+          <button onclick="detectError()" class="btn btn-block">
+            <i class="fas fa-search"></i> Lookup Error
+          </button>
+          
+          <button id="detailsButton" class="btn btn-block mt-2 hidden" onclick="showErrorDetails()">
+            <i class="fas fa-info-circle"></i> View Details
+          </button>
+          
+          <button id="reportButton" class="btn btn-warning btn-block mt-2 hidden" onclick="showPage('reportPage')">
+            <i class="fas fa-flag"></i> Report Issue
+          </button>
+        </div>
+
+        <!-- QR Scanner Page -->
+        <div id="scanPage" class="card hidden">
+          <div class="card-header">
+            <h2 class="card-title"><i class="fas fa-qrcode"></i> Scan Error Code</h2>
+            <button onclick="stopScanner()" class="btn btn-outline">
+              <i class="fas fa-times"></i> Cancel
+            </button>
+          </div>
+          
+          <div class="scanner-frame">
+            <video id="video" playsinline></video>
+            <div class="scanner-overlay">
+              <div class="scanner-box">
+                <div class="scanner-line"></div>
+              </div>
+            </div>
+          </div>
+          
+          <div id="scanStatus" class="text-center mb-4 text-muted">
+            <i class="fas fa-circle-notch fa-spin"></i> Initializing scanner...
+          </div>
+          
+          <div class="scanner-controls">
+            <button onclick="toggleFlash()" id="flashToggle" class="btn btn-outline">
+              <i class="fas fa-lightbulb"></i> Flash Off
+            </button>
+            <button onclick="showPage('manualPage')" class="btn btn-outline">
+              <i class="fas fa-keyboard"></i> Manual Entry
+            </button>
+          </div>
+          
+          <div id="scanOutput" class="alert"></div>
+          
+          <button id="scanDetailsButton" class="btn btn-block hidden" onclick="showErrorDetails()">
+            <i class="fas fa-info-circle"></i> View Details
+          </button>
+          
+          <button id="scanReportButton" class="btn btn-warning btn-block mt-2 hidden" onclick="showPage('reportPage')">
+            <i class="fas fa-flag"></i> Report Issue
+          </button>
+        </div>
+
+        <!-- Report Issue Page -->
+        <div id="reportPage" class="card hidden">
+          <div class="card-header">
+            <h2 class="card-title"><i class="fas fa-flag"></i> Report New Issue</h2>
+            <button onclick="history.back()" class="btn btn-outline">
+              <i class="fas fa-arrow-left"></i> Back
+            </button>
+          </div>
+          
+          <div class="form-group">
+            <label for="reportModel" class="form-label">Crane Model</label>
+            <input type="text" id="reportModel" class="form-control" readonly>
+          </div>
+          
+          <div class="form-group">
+            <label for="reportCode" class="form-label">Error Code</label>
+            <input type="text" id="reportCode" class="form-control" readonly>
+          </div>
+          
+          <div class="form-group">
+            <label for="issueType" class="form-label">Issue Type</label>
+            <select id="issueType" class="form-control">
+              <option value="mechanical">Mechanical</option>
+              <option value="electrical">Electrical</option>
+              <option value="hydraulic">Hydraulic</option>
+              <option value="safety">Safety</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="issuePriority" class="form-label">Priority</label>
+            <select id="issuePriority" class="form-control">
+              <option value="low">Low</option>
+              <option value="medium" selected>Medium</option>
+              <option value="high">High</option>
+              <option value="critical">Critical</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="issueDescription" class="form-label">Description</label>
+            <textarea id="issueDescription" class="form-control" placeholder="Describe the issue in detail..."></textarea>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">Upload Images (Optional)</label>
+            <div style="border: 2px dashed var(--glass-border); border-radius: var(--radius-sm); padding: 20px; text-align: center; cursor: pointer;">
+              <i class="fas fa-cloud-upload-alt" style="font-size: 24px; color: var(--gray); margin-bottom: 10px;"></i>
+              <div>Click to upload or drag and drop</div>
+              <div class="text-muted" style="font-size: 12px;">Supports JPG, PNG (Max 5MB each)</div>
+            </div>
+          </div>
+          
+          <div id="reportOutput" class="alert"></div>
+          
+          <button onclick="submitIssueReport()" class="btn btn-block">
+            <i class="fas fa-paper-plane"></i> Submit Report
+          </button>
+        </div>
+
+        <!-- Error Details Page -->
+        <div id="errorDetailsPage" class="card hidden">
+          <div class="card-header">
+            <h2 class="card-title"><i class="fas fa-info-circle"></i> Error Details</h2>
+            <button onclick="history.back()" class="btn btn-outline">
+              <i class="fas fa-arrow-left"></i> Back
+            </button>
+          </div>
+          
+          <div class="detail-section">
+            <h3><i class="fas fa-exclamation-triangle"></i> Error Information</h3>
+            <div id="errorTitle" style="font-weight: bold; font-size: 18px; margin-bottom: 10px; color: white;"></div>
+            <div id="errorDescription" style="margin-bottom: 15px; color: var(--gray-light);"></div>
+            
+            <h3><i class="fas fa-bolt"></i> Severity</h3>
+            <div id="errorSeverity" class="severity-badge"></div>
+          </div>
+          
+          <div class="detail-section">
+            <h3><i class="fas fa-tools"></i> Recommended Actions</h3>
+            <ul class="detail-list" id="recommendedActions"></ul>
+          </div>
+          
+          <div class="detail-section">
+            <h3><i class="fas fa-shield-alt"></i> Safety Precautions</h3>
+            <ul class="detail-list" id="safetyPrecautions"></ul>
+          </div>
+          
+          <div class="detail-section">
+            <h3><i class="fas fa-history"></i> Historical Data</h3>
+            <div style="display: flex; gap: 15px; margin-top: 15px;">
+              <div style="background: rgba(30, 41, 59, 0.7); padding: 12px; border-radius: var(--radius-sm); flex: 1;">
+                <div style="font-size: 12px; color: var(--gray);">Occurrences</div>
+                <div style="font-size: 20px; font-weight: bold; color: var(--danger);">14</div>
+                <div style="font-size: 12px; color: var(--gray);">This year</div>
+              </div>
+              <div style="background: rgba(30, 41, 59, 0.7); padding: 12px; border-radius: var(--radius-sm); flex: 1;">
+                <div style="font-size: 12px; color: var(--gray);">Last Occurred</div>
+                <div style="font-size: 20px; font-weight: bold; color: white;">3 days ago</div>
+                <div style="font-size: 12px; color: var(--gray);">ZX-5000 #42</div>
+              </div>
+            </div>
+          </div>
+          
+          <button onclick="history.back()" class="btn btn-outline btn-block">
+            <i class="fas fa-arrow-left"></i> Back
+          </button>
+          
+          <button class="btn btn-success btn-block mt-2" onclick="markAsResolved()">
+            <i class="fas fa-check"></i> Mark as Resolved
+          </button>
+        </div>
+
+        <!-- Settings Page -->
+        <div id="settingsPage" class="card hidden">
+          <div class="card-header">
+            <h2 class="card-title"><i class="fas fa-cog"></i> Settings</h2>
+            <button onclick="showPage('homePage')" class="btn btn-outline">
+              <i class="fas fa-arrow-left"></i> Back
+            </button>
+          </div>
+          
+          <div class="form-group">
+            <label for="notifications" class="form-label">Notifications</label>
+            <select id="notifications" class="form-control">
+              <option value="all">All notifications</option>
+              <option value="critical">Critical only</option>
+              <option value="none">None</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="theme" class="form-label">Theme</label>
+            <select id="theme" class="form-control">
+              <option value="dark">Dark</option>
+              <option value="light">Light</option>
+              <option value="system">System Default</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="language" class="form-label">Language</label>
+            <select id="language" class="form-control">
+              <option value="en">English</option>
+              <option value="es">Español</option>
+              <option value="fr">Français</option>
+              <option value="de">Deutsch</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">Data Sync</label>
+            <div style="background: rgba(30, 41, 59, 0.5); padding: 12px; border-radius: var(--radius-sm);">
+              <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                <span>Last sync</span>
+                <span>2 minutes ago</span>
+              </div>
+              <button class="btn btn-sm btn-outline" style="width: 100%;">
+                <i class="fas fa-sync-alt"></i> Sync Now
+              </button>
+            </div>
+          </div>
+          
+          <div id="settingsOutput" class="alert"></div>
+          
+          <button onclick="saveSettings()" class="btn btn-block">
+            <i class="fas fa-save"></i> Save Settings
+          </button>
+          
+          <div class="nav-divider mt-4 mb-4"></div>
+          
+          <h3 style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+            <i class="fas fa-user-shield"></i> Account
+          </h3>
+          
+          <div class="form-group">
+            <label for="currentPassword" class="form-label">Current Password</label>
+            <input type="password" id="currentPassword" class="form-control" placeholder="Enter current password">
+          </div>
+          
+          <div class="form-group">
+            <label for="newPassword" class="form-label">New Password</label>
+            <input type="password" id="newPassword" class="form-control" placeholder="Enter new password">
+          </div>
+          
+          <div class="form-group">
+            <label for="confirmPassword" class="form-label">Confirm New Password</label>
+            <input type="password" id="confirmPassword" class="form-control" placeholder="Confirm new password">
+          </div>
+          
+          <button onclick="changePassword()" class="btn btn-block btn-outline">
+            <i class="fas fa-key"></i> Change Password
+          </button>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
+  
+  <script>
+    // Global variables
+    let currentUser = null;
+    let errorData = null;
+    let videoStream = null;
+    let flashOn = false;
+    let scanInterval = null;
+    let currentError = null;
+    let navCollapsed = false;
+    
+    // Sample error database
+    const errorDatabase = {
+      "ZX-5000": {
+        "E003": {
+          title: "Hydraulic Pressure Low",
+          description: "The hydraulic system pressure has dropped below the minimum threshold. This could indicate a leak, pump failure, or blocked filter.",
+          severity: "High",
+          actions: [
+            "Check hydraulic fluid level and top up if necessary",
+            "Inspect for visible leaks in hydraulic lines",
+            "Check hydraulic pump operation",
+            "Replace hydraulic filter if clogged"
+          ],
+          precautions: [
+            "Do not operate crane until issue is resolved",
+            "Relieve hydraulic pressure before inspection",
+            "Use proper PPE when handling hydraulic fluid"
+          ]
+        },
+        "F-23": {
+          title: "Overload Warning",
+          description: "The crane has detected a load that exceeds the rated capacity for the current configuration.",
+          severity: "Critical",
+          actions: [
+            "Immediately lower the load to a safe position",
+            "Verify load weight and crane configuration",
+            "Check load moment indicator calibration",
+            "Inspect boom and outrigger sensors"
+          ],
+          precautions: [
+            "Do not attempt to lift or move load",
+            "Keep personnel clear of load area",
+            "Follow emergency procedures if instability is detected"
+          ]
+        },
+        "H112": {
+          title: "Engine Temperature High",
+          description: "The engine coolant temperature has exceeded safe operating limits.",
+          severity: "Medium",
+          actions: [
+            "Allow engine to cool down",
+            "Check coolant level and condition",
+            "Inspect radiator for blockages",
+            "Test thermostat operation",
+            "Check water pump function"
+          ],
+          precautions: [
+            "Avoid opening radiator cap when hot",
+            "Monitor temperature gauge closely",
+            "Shut down engine if temperature continues to rise"
+          ]
+        }
+      },
+      "HIAB T-HiDuo 013": {
+        "L045": {
+          title: "Load Sensor Malfunction",
+          description: "The load moment indicator system has detected an inconsistency in load sensor readings.",
+          severity: "High",
+          actions: [
+            "Perform sensor calibration procedure",
+            "Check wiring connections to sensors",
+            "Inspect load cell for damage",
+            "Test system with known weights"
+          ],
+          precautions: [
+            "Do not rely on load indicator until verified",
+            "Use extreme caution when lifting loads",
+            "Follow manual lifting capacity charts"
+          ]
+        }
+      },
+      "LTM 1100": {
+        "E007": {
+          title: "Boom Angle Sensor Fault",
+          description: "The boom angle sensor is providing inconsistent readings or has failed.",
+          severity: "High",
+          actions: [
+            "Perform sensor calibration",
+            "Check wiring harness for damage",
+            "Inspect sensor mounting",
+            "Replace sensor if necessary"
+          ],
+          precautions: [
+            "Do not extend boom until resolved",
+            "Manually verify boom position",
+            "Use spotter when moving crane"
+          ]
+        }
+      }
+    };
+    
+    // Maintenance checklist data
+    const maintenanceData = {
+      daily: [
+        "Check hydraulic fluid levels",
+        "Inspect wire ropes for damage",
+        "Test emergency stop function",
+        "Check tire pressure (if applicable)",
+        "Inspect hooks and latches",
+        "Verify safety labels are legible",
+        "Check all warning lights and alarms",
+        "Inspect outriggers and stabilizers",
+        "Test all operational controls",
+        "Check for fluid leaks"
+      ],
+      weekly: [
+        "Lubricate all pivot points",
+        "Inspect hydraulic hoses for leaks",
+        "Test all limit switches",
+        "Check battery condition",
+        "Verify load indicator accuracy",
+        "Inspect outrigger pads",
+        "Check wire rope for wear",
+        "Test all safety devices",
+        "Inspect electrical connections",
+        "Check boom extension mechanism",
+        "Verify calibration of sensors",
+        "Inspect cab controls"
+      ],
+      monthly: [
+        "Perform full function test",
+        "Inspect structural components",
+        "Check electrical connections",
+        "Test all warning alarms",
+        "Verify calibration of all sensors",
+        "Inspect boom sections for cracks",
+        "Check hydraulic system pressure",
+        "Test overload protection system",
+        "Inspect all safety interlocks",
+        "Check wear pads and bushings",
+        "Inspect hydraulic cylinders",
+        "Verify proper operation of brakes",
+        "Check all fluid levels",
+        "Inspect all fasteners and bolts",
+        "Test radio remote control (if equipped)",
+        "Verify proper operation of anti-two block",
+        "Inspect all sheaves and rollers",
+        "Check for proper operation of limit switches"
+      ]
+    };
+    
+    // Recent errors data
+    const recentErrors = [
+      { model: "ZX-5000", code: "E003", time: "2 hours ago", resolved: false },
+      { model: "LTM 1100", code: "E007", time: "1 day ago", resolved: true },
+      { model: "HIAB T-HiDuo 013", code: "L045", time: "3 days ago", resolved: false },
+      { model: "ZX-5000", code: "H112", time: "5 days ago", resolved: true },
+      { model: "LTM 1100", code: "F-23", time: "1 week ago", resolved: false }
+    ];
+    
+    // Initialize the app when DOM is loaded
+    document.addEventListener('DOMContentLoaded', function() {
+      // Check if user is already logged in (from localStorage)
+      const savedUser = localStorage.getItem('craneAppUser');
+      if (savedUser) {
+        currentUser = JSON.parse(savedUser);
+        updateUserInfo();
+        showPage('homePage');
+        initializeDashboard();
+        initializeMaintenanceChecklists();
+      } else {
+        showPage('loginPage');
+      }
+      
+      // Add animation to cards after they're shown
+      setTimeout(() => {
+        const cards = document.querySelectorAll('.card');
+        cards.forEach(card => {
+          card.classList.add('show');
+        });
+      }, 100);
+    });
+    
+    // Toggle navigation
+    function toggleNav() {
+      navCollapsed = !navCollapsed;
+      document.body.classList.toggle('nav-collapsed', navCollapsed);
+    }
+    
+    // Toggle dropdown menu
+    function toggleDropdown() {
+      document.getElementById('dropdownMenu').classList.toggle('show');
+    }
+    
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(event) {
+      if (!event.target.closest('.user-dropdown')) {
+        document.getElementById('dropdownMenu').classList.remove('show');
+      }
+    });
+    
+    // Update user info in header
+    function updateUserInfo() {
+      if (!currentUser) return;
+      
+      document.getElementById('currentUserName').textContent = currentUser.name;
+      document.getElementById('userAvatar').textContent = currentUser.name.charAt(0).toUpperCase();
+    }
+    
+    // Page navigation function
+    function showPage(pageId) {
+      // Hide all pages
+      document.querySelectorAll('.card').forEach(page => {
+        page.classList.add('hidden');
+      });
+      
+      // Update active nav link
+      document.querySelectorAll('.nav-link').forEach(link => {
+        link.classList.remove('active');
+      });
+      
+      // Set active state for corresponding nav link
+      const navLinks = {
+        'dashboardPage': '[onclick="showPage(\'dashboardPage\')"]',
+        'maintenancePage': '[onclick="showPage(\'maintenancePage\')"]',
+        'manualPage': '[onclick="showPage(\'manualPage\')"]',
+        'settingsPage': '[onclick="showPage(\'settingsPage\')"]'
+      };
+      
+      if (navLinks[pageId]) {
+        document.querySelector(`.nav-link${navLinks[pageId]}`).classList.add('active');
+      }
+      
+      // Show requested page
+      const page = document.getElementById(pageId);
+      if (page) {
+        page.classList.remove('hidden');
+        
+        // Initialize specific pages when shown
+        if (pageId === 'dashboardPage') {
+          updateDashboard();
+        } else if (pageId === 'maintenancePage') {
+          updateChecklistProgress();
+        } else if (pageId === 'reportPage' && currentError) {
+          document.getElementById('reportModel').value = currentError.model;
+          document.getElementById('reportCode').value = currentError.code;
+        }
+      }
+    }
+    
+    // Login function
+    function login() {
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      const remember = document.getElementById('remember').checked;
+      
+      // Simple validation
+      if (!username || !password) {
+        showMessage('loginOutput', 'Please enter both username and password', 'error');
+        return;
+      }
+      
+      // Simulate authentication (in a real app, this would be an API call)
+      if (password.length < 6) {
+        showMessage('loginOutput', 'Invalid credentials. Please try again.', 'error');
+        return;
+      }
+      
+      // Successful login
+      currentUser = {
+        id: 'OP-' + Math.floor(Math.random() * 10000),
+        name: username,
+        role: 'operator',
+        lastLogin: new Date().toISOString()
+      };
+      
+      // Save to localStorage if "Remember me" is checked
+      if (remember) {
+        localStorage.setItem('craneAppUser', JSON.stringify(currentUser));
+      }
+      
+      showMessage('loginOutput', 'Login successful! Redirecting...', 'success');
+      updateUserInfo();
+      
+      // Initialize app components
+      initializeDashboard();
+      initializeMaintenanceChecklists();
+      
+      // Redirect to home page after delay
+      setTimeout(() => {
+        showPage('homePage');
+      }, 1500);
+    }
+    
+    // Logout function
+    function logout() {
+      currentUser = null;
+      localStorage.removeItem('craneAppUser');
+      showPage('loginPage');
+      
+      // Clear login form
+      document.getElementById('username').value = '';
+      document.getElementById('password').value = '';
+      document.getElementById('loginOutput').classList.remove('show');
+    }
+    
+    // Password reset function
+    function sendResetLink() {
+      const email = document.getElementById('resetEmail').value;
+      
+      if (!email || !email.includes('@')) {
+        showMessage('resetOutput', 'Please enter a valid email address', 'error');
+        return;
+      }
+      
+      // Simulate sending reset link
+      showMessage('resetOutput', 'Password reset link has been sent to your email', 'success');
+      
+      // Clear form after delay
+      setTimeout(() => {
+        document.getElementById('resetEmail').value = '';
+        document.getElementById('resetOutput').classList.remove('show');
+        showPage('loginPage');
+      }, 3000);
+    }
+    
+    // Show message in output div
+    function showMessage(elementId, message, type) {
+      const element = document.getElementById(elementId);
+      element.textContent = message;
+      element.className = `alert alert-${type} show`;
+      
+      // Auto-hide after 5 seconds
+      setTimeout(() => {
+        element.classList.remove('show');
+      }, 5000);
+    }
+    
+    // Initialize dashboard
+    function initializeDashboard() {
+      // Create error chart
+      const ctx = document.getElementById('errorChart').getContext('2d');
+      const errorChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+          datasets: [{
+            label: 'Errors Reported',
+            data: [12, 19, 15, 24, 18, 16, 22],
+            borderColor: '#f59e0b',
+            backgroundColor: 'rgba(245, 158, 11, 0.1)',
+            tension: 0.3,
+            fill: true,
+            borderWidth: 2,
+            pointBackgroundColor: '#fff',
+            pointBorderColor: '#f59e0b',
+            pointRadius: 4,
+            pointHoverRadius: 6
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: false
+            },
+            tooltip: {
+              backgroundColor: 'rgba(15, 23, 42, 0.9)',
+              titleColor: '#f8fafc',
+              bodyColor: '#e2e8f0',
+              borderColor: 'rgba(255, 255, 255, 0.1)',
+              borderWidth: 1,
+              padding: 12,
+              usePointStyle: true,
+              callbacks: {
+                label: function(context) {
+                  return `${context.parsed.y} errors`;
+                }
+              }
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              grid: {
+                color: 'rgba(255, 255, 255, 0.05)'
+              },
+              ticks: {
+                color: '#94a3b8'
+              },
+              border: {
+                display: false
+              }
+            },
+            x: {
+              grid: {
+                display: false
+              },
+              ticks: {
+                color: '#94a3b8'
+              },
+              border: {
+                display: false
+              }
+            }
+          }
+        }
+      });
+      
+      // Populate recent errors list
+      updateRecentErrors();
+    }
+    
+    // Update dashboard stats
+    function updateDashboard() {
+      // These would normally come from an API
+      document.getElementById('totalErrors').textContent = '24';
+      document.getElementById('criticalErrors').textContent = '5';
+      document.getElementById('uptime').textContent = '98.7%';
+      document.getElementById('maintenanceDue').textContent = '3';
+      
+      updateRecentErrors();
+    }
+    
+    // Refresh errors list
+    function refreshErrors() {
+      // Simulate loading
+      const list = document.getElementById('recentErrorsList');
+      list.innerHTML = '<div class="empty-state"><i class="fas fa-circle-notch fa-spin"></i><div>Loading errors...</div></div>';
+      
+      // Simulate API call delay
+      setTimeout(() => {
+        updateRecentErrors();
+      }, 1000);
+    }
+    
+    // Update recent errors list
+    function updateRecentErrors() {
+      const container = document.getElementById('recentErrorsList');
+      container.innerHTML = '';
+      
+      if (recentErrors.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <i class="fas fa-check-circle"></i>
+            <h3>No Recent Errors</h3>
+            <p>No errors have been reported in the last 30 days</p>
+          </div>
+        `;
+        return;
+      }
+      
+      recentErrors.forEach(error => {
+        const item = document.createElement('div');
+        item.className = `error-item ${error.resolved ? 'resolved' : ''}`;
+        
+        item.innerHTML = `
+          <div class="model">${error.model}</div>
+          <div class="code">${error.code}</div>
+          <div class="time">${error.time}</div>
+          <button class="btn btn-outline btn-sm" onclick="viewErrorDetail('${error.model}', '${error.code}')">
+            <i class="fas fa-info-circle"></i> Details
+          </button>
+        `;
+        
+        container.appendChild(item);
+      });
+    }
+    
+    // Initialize maintenance checklists
+    function initializeMaintenanceChecklists() {
+      const dailyList = document.getElementById('dailyChecklistItems');
+      const weeklyList = document.getElementById('weeklyChecklistItems');
+      const monthlyList = document.getElementById('monthlyChecklistItems');
+      
+      // Clear existing items
+      dailyList.innerHTML = '';
+      weeklyList.innerHTML = '';
+      monthlyList.innerHTML = '';
+      
+      // Add daily checklist items
+      maintenanceData.daily.forEach((item, index) => {
+        const checkboxId = `daily-${index}`;
+        dailyList.appendChild(createChecklistItem(checkboxId, item, 'daily'));
+      });
+      
+      // Add weekly checklist items
+      maintenanceData.weekly.forEach((item, index) => {
+        const checkboxId = `weekly-${index}`;
+        weeklyList.appendChild(createChecklistItem(checkboxId, item, 'weekly'));
+      });
+      
+      // Add monthly checklist items
+      maintenanceData.monthly.forEach((item, index) => {
+        const checkboxId = `monthly-${index}`;
+        monthlyList.appendChild(createChecklistItem(checkboxId, item, 'monthly'));
+      });
+      
+      updateChecklistProgress();
+    }
+    
+    // Create checklist item element
+    function createChecklistItem(id, text, type) {
+      const item = document.createElement('div');
+      item.className = 'checklist-item';
+      
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.id = id;
+      checkbox.className = 'checklist-checkbox';
+      checkbox.onchange = function() {
+        updateChecklistProgress();
+      };
+      
+      const label = document.createElement('label');
+      label.htmlFor = id;
+      label.textContent = text;
+      label.style.cursor = 'pointer';
+      label.style.flex = '1';
+      
+      item.appendChild(checkbox);
+      item.appendChild(label);
+      
+      return item;
+    }
+    
+    // Update checklist progress bars
+    function updateChecklistProgress() {
+      updateSingleChecklistProgress('daily');
+      updateSingleChecklistProgress('weekly');
+      updateSingleChecklistProgress('monthly');
+    }
+    
+    function updateSingleChecklistProgress(type) {
+      const container = document.getElementById(`${type}ChecklistItems`);
+      const checkboxes = container.querySelectorAll('input[type="checkbox"]');
+      const progressBar = document.getElementById(`${type}Progress`);
+      const progressText = container.nextElementSibling.querySelector('span:first-child');
+      const progressCount = container.nextElementSibling.querySelector('span:last-child');
+      
+      let checkedCount = 0;
+      checkboxes.forEach(checkbox => {
+        if (checkbox.checked) checkedCount++;
+      });
+      
+      const progress = Math.round((checkedCount / checkboxes.length) * 100);
+      progressBar.style.width = `${progress}%`;
+      progressText.textContent = `${progress}% completed`;
+      progressCount.textContent = `${checkedCount} of ${checkboxes.length} tasks`;
+      
+      // Update item styling
+      checkboxes.forEach(checkbox => {
+        const item = checkbox.parentElement;
+        if (checkbox.checked) {
+          item.classList.add('completed');
+        } else {
+          item.classList.remove('completed');
+        }
+      });
+    }
+    
+    // Complete all tasks in current checklist
+    function completeAllTasks() {
+      const activeTab = document.querySelector('.tab-button.active').textContent.toLowerCase();
+      const container = document.getElementById(`${activeTab}ChecklistItems`);
+      const checkboxes = container.querySelectorAll('input[type="checkbox"]');
+      
+      checkboxes.forEach(checkbox => {
+        checkbox.checked = true;
+        checkbox.dispatchEvent(new Event('change'));
+      });
+    }
+    
+    // Generate maintenance report
+    function generateReport() {
+      alert('Maintenance report generated and sent to your email');
+    }
+    
+    // Switch between maintenance tabs
+    function switchMaintenanceTab(tab) {
+      // Update tab buttons
+      document.querySelectorAll('.tab-button').forEach(button => {
+        button.classList.remove('active');
+      });
+      event.target.classList.add('active');
+      
+      // Show selected tab content
+      document.getElementById('dailyChecklist').classList.add('hidden');
+      document.getElementById('weeklyChecklist').classList.add('hidden');
+      document.getElementById('monthlyChecklist').classList.add('hidden');
+      document.getElementById(`${tab}Checklist`).classList.remove('hidden');
+    }
+    
+    // Error detection function
+    function detectError() {
+      const model = document.getElementById('model').value.trim();
+      const code = document.getElementById('code').value.trim().toUpperCase();
+      
+      if (!model || !code) {
+        showMessage('output', 'Please enter both model and error code', 'error');
+        return;
+      }
+      
+      // Check if error exists in database
+      if (errorDatabase[model] && errorDatabase[model][code]) {
+        currentError = {
+          model: model,
+          code: code,
+          ...errorDatabase[model][code]
+        };
+        
+        showMessage('output', `Error found: ${currentError.title}`, 'success');
+        document.getElementById('detailsButton').classList.remove('hidden');
+        document.getElementById('reportButton').classList.remove('hidden');
+      } else {
+        currentError = null;
+        showMessage('output', 'Error code not found for this model. Please verify and try again.', 'error');
+        document.getElementById('detailsButton').classList.add('hidden');
+        document.getElementById('reportButton').classList.add('hidden');
+      }
+    }
+    
+    // Show error details
+    function showErrorDetails() {
+      if (!currentError) return;
+      
+      // Populate error details page
+      document.getElementById('errorTitle').textContent = `${currentError.model} - ${currentError.code}: ${currentError.title}`;
+      document.getElementById('errorDescription').textContent = currentError.description;
+      
+      const severityElement = document.getElementById('errorSeverity');
+      severityElement.textContent = currentError.severity;
+      severityElement.className = 'severity-badge';
+      
+      // Set severity class
+      if (currentError.severity.toLowerCase() === 'critical') {
+        severityElement.classList.add('severity-critical');
+      } else if (currentError.severity.toLowerCase() === 'high') {
+        severityElement.classList.add('severity-high');
+      } else if (currentError.severity.toLowerCase() === 'medium') {
+        severityElement.classList.add('severity-medium');
+      } else {
+        severityElement.classList.add('severity-low');
+      }
+      
+      // Populate recommended actions
+      const actionsList = document.getElementById('recommendedActions');
+      actionsList.innerHTML = '';
+      currentError.actions.forEach(action => {
+        const li = document.createElement('li');
+        li.textContent = action;
+        actionsList.appendChild(li);
+      });
+      
+      // Populate safety precautions
+      const precautionsList = document.getElementById('safetyPrecautions');
+      precautionsList.innerHTML = '';
+      currentError.precautions.forEach(precaution => {
+        const li = document.createElement('li');
+        li.textContent = precaution;
+        precautionsList.appendChild(li);
+      });
+      
+      showPage('errorDetailsPage');
+    }
+    
+    // View error detail from dashboard
+    function viewErrorDetail(model, code) {
+      if (errorDatabase[model] && errorDatabase[model][code]) {
+        currentError = {
+          model: model,
+          code: code,
+          ...errorDatabase[model][code]
+        };
+        showErrorDetails();
+      }
+    }
+    
+    // Mark error as resolved
+    function markAsResolved() {
+      if (!currentError) return;
+      
+      // In a real app, this would update the backend
+      showMessage('output', `Error ${currentError.code} marked as resolved`, 'success');
+      
+      // Update recent errors list (simulated)
+      const errorIndex = recentErrors.findIndex(e => 
+        e.model === currentError.model && e.code === currentError.code
+      );
+      
+      if (errorIndex !== -1) {
+        recentErrors[errorIndex].resolved = true;
+        updateRecentErrors();
+      }
+      
+      // Go back to previous page
+      history.back();
+    }
+    
+    // Initialize QR scanner
+    function initScanner() {
+      showPage('scanPage');
+      document.getElementById('scanOutput').classList.remove('show');
+      
+      navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
+        .then(function(stream) {
+          videoStream = stream;
+          const video = document.getElementById('video');
+          video.srcObject = stream;
+          video.play();
+          video.style.display = 'block';
+          
+          document.getElementById('scanStatus').innerHTML = '<i class="fas fa-check-circle"></i> Ready to scan';
+          
+          // Start scanning
+          scanInterval = setInterval(scanQRCode, 500);
+        })
+        .catch(function(err) {
+          console.error("Error accessing camera:", err);
+          document.getElementById('scanStatus').innerHTML = '<i class="fas fa-times-circle"></i> Camera access denied';
+          document.getElementById('scanOutput').textContent = 'Could not access camera. Please check permissions.';
+          document.getElementById('scanOutput').className = 'alert alert-danger show';
+        });
+    }
+    
+    // Stop scanner
+    function stopScanner() {
+      if (scanInterval) {
+        clearInterval(scanInterval);
+        scanInterval = null;
+      }
+      
+      if (videoStream) {
+        videoStream.getTracks().forEach(track => track.stop());
+        videoStream = null;
+      }
+      
+      document.getElementById('video').style.display = 'none';
+      showPage('homePage');
+    }
+    
+    // Scan for QR codes
+    function scanQRCode() {
+      const video = document.getElementById('video');
+      const canvas = document.createElement('canvas');
+      const context = canvas.getContext('2d');
+      
+      if (video.readyState === video.HAVE_ENOUGH_DATA) {
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+        
+        const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+        const code = jsQR(imageData.data, imageData.width, imageData.height, {
+          inversionAttempts: 'dontInvert',
+        });
+        
+        if (code) {
+          // Parse the QR code data (expected format: "MODEL:CODE")
+          const parts = code.data.split(':');
+          if (parts.length === 2) {
+            const model = parts[0].trim();
+            const code = parts[1].trim();
+            
+            // Check if error exists in database
+            if (errorDatabase[model] && errorDatabase[model][code]) {
+              currentError = {
+                model: model,
+                code: code,
+                ...errorDatabase[model][code]
+              };
+              
+              document.getElementById('scanOutput').textContent = `Scanned: ${model} - ${code}`;
+              document.getElementById('scanOutput').className = 'alert alert-success show';
+              
+              document.getElementById('scanDetailsButton').classList.remove('hidden');
+              document.getElementById('scanReportButton').classList.remove('hidden');
+              
+              // Stop scanning
+              clearInterval(scanInterval);
+              scanInterval = null;
+            } else {
+              document.getElementById('scanOutput').textContent = 'Error code not recognized';
+              document.getElementById('scanOutput').className = 'alert alert-error show';
+            }
+          } else {
+            document.getElementById('scanOutput').textContent = 'Invalid QR code format';
+            document.getElementById('scanOutput').className = 'alert alert-error show';
+          }
+        }
+      }
+    }
+    
+    // Toggle flashlight
+    function toggleFlash() {
+      if (!videoStream) return;
+      
+      const track = videoStream.getVideoTracks()[0];
+      if (!track || !track.getCapabilities().torch) return;
+      
+      flashOn = !flashOn;
+      track.applyConstraints({
+        advanced: [{ torch: flashOn }]
+      });
+      
+      document.getElementById('flashToggle').innerHTML = 
+        `<i class="fas fa-lightbulb"></i> Flash ${flashOn ? 'On' : 'Off'}`;
+    }
+    
+    // Submit issue report
+    function submitIssueReport() {
+      const model = document.getElementById('reportModel').value;
+      const code = document.getElementById('reportCode').value;
+      const type = document.getElementById('issueType').value;
+      const priority = document.getElementById('issuePriority').value;
+      const description = document.getElementById('issueDescription').value;
+      
+      if (!description) {
+        showMessage('reportOutput', 'Please provide a description of the issue', 'error');
+        return;
+      }
+      
+      // In a real app, this would send to a backend
+      showMessage('reportOutput', 'Issue report submitted successfully', 'success');
+      
+      // Add to recent errors (simulated)
+      recentErrors.unshift({
+        model: model,
+        code: code,
+        time: 'Just now',
+        resolved: false
+      });
+      
+      // Clear form
+      document.getElementById('issueDescription').value = '';
+      
+      // Go back to error details after delay
+      setTimeout(() => {
+        showPage('errorDetailsPage');
+      }, 2000);
+    }
+    
+    // Trigger emergency stop
+    function triggerEmergency() {
+      if (confirm('Are you sure you want to trigger an emergency stop? This will immediately halt all crane operations.')) {
+        // In a real app, this would trigger an actual emergency stop
+        alert('EMERGENCY STOP ACTIVATED! All systems have been halted. Please follow safety procedures.');
+        
+        // Log the emergency event
+        recentErrors.unshift({
+          model: 'SYSTEM',
+          code: 'EMERGENCY',
+          time: 'Just now',
+          resolved: false
+        });
+        
+        updateRecentErrors();
+      }
+    }
+    
+    // Save settings
+    function saveSettings() {
+      const notifications = document.getElementById('notifications').value;
+      const theme = document.getElementById('theme').value;
+      const language = document.getElementById('language').value;
+      
+      // In a real app, this would save to backend/user preferences
+      showMessage('settingsOutput', 'Settings saved successfully', 'success');
+      
+      // Apply theme immediately (simplified)
+      if (theme === 'light') {
+        document.body.style.background = '#f8fafc';
+        document.body.style.color = '#1e293b';
+      } else {
+        document.body.style.background = 'linear-gradient(135deg, var(--darker), var(--dark))';
+        document.body.style.color = '#f8fafc';
+      }
+    }
+    
+    // Change password
+    function changePassword() {
+      const current = document.getElementById('currentPassword').value;
+      const newPass = document.getElementById('newPassword').value;
+      const confirm = document.getElementById('confirmPassword').value;
+      
+      if (!current || !newPass || !confirm) {
+        showMessage('settingsOutput', 'Please fill all password fields', 'error');
+        return;
+      }
+      
+      if (newPass !== confirm) {
+        showMessage('settingsOutput', 'New passwords do not match', 'error');
+        return;
+      }
+      
+      if (newPass.length < 8) {
+        showMessage('settingsOutput', 'Password must be at least 8 characters', 'error');
+        return;
+      }
+      
+      // In a real app, this would verify current password and update
+      showMessage('settingsOutput', 'Password changed successfully', 'success');
+      
+      // Clear form
+      document.getElementById('currentPassword').value = '';
+      document.getElementById('newPassword').value = '';
+      document.getElementById('confirmPassword').value = '';
+    }
+  </script>
+</body>
+</html>
