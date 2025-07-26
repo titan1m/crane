@@ -1,0 +1,86 @@
+<div class="card">
+  <div class="card-header">
+    <h2 class="card-title"><i class="fas fa-tachometer-alt"></i> Equipment Overview</h2>
+    <a href="home.html" class="btn btn-outline">
+      <i class="fas fa-arrow-left"></i> Back
+    </a>
+  </div>
+  
+  <div class="grid grid-cols-4">
+    <div class="stat-card">
+      <div class="stat-icon primary">
+        <i class="fas fa-exclamation-circle"></i>
+      </div>
+      <div class="stat-value" id="totalErrors">0</div>
+      <div class="stat-label">Total Errors</div>
+      <div class="stat-change negative">
+        <i class="fas fa-arrow-up"></i> 0% from last month
+      </div>
+    </div>
+    
+    <div class="stat-card">
+      <div class="stat-icon danger">
+        <i class="fas fa-times-circle"></i>
+      </div>
+      <div class="stat-value" id="criticalErrors">0</div>
+      <div class="stat-label">Critical Errors</div>
+      <div class="stat-change positive">
+        <i class="fas fa-arrow-down"></i> 0% from last month
+      </div>
+    </div>
+    
+    <div class="stat-card">
+      <div class="stat-icon success">
+        <i class="fas fa-chart-line"></i>
+      </div>
+      <div class="stat-value" id="uptime">0%</div>
+      <div class="stat-label">Uptime</div>
+      <div class="stat-change positive">
+        <i class="fas fa-arrow-up"></i> 0% from last month
+      </div>
+    </div>
+    
+    <div class="stat-card">
+      <div class="stat-icon warning">
+        <i class="fas fa-tools"></i>
+      </div>
+      <div class="stat-value" id="maintenanceDue">0</div>
+      <div class="stat-label">Maintenance Due</div>
+      <div class="stat-change">
+        <i class="fas fa-equals"></i> Same as last month
+      </div>
+    </div>
+  </div>
+  
+  <div class="card">
+    <div class="card-header">
+      <h2 class="card-title"><i class="fas fa-chart-bar"></i> Error Trends</h2>
+    </div>
+    <div class="chart-container">
+      <canvas id="errorChart"></canvas>
+    </div>
+  </div>
+  
+  <div class="card">
+    <div class="card-header">
+      <h2 class="card-title"><i class="fas fa-exclamation-circle"></i> Recent Errors</h2>
+      <button id="refreshErrorsBtn" class="btn btn-outline btn-sm">
+        <i class="fas fa-sync-alt"></i> Refresh
+      </button>
+    </div>
+    
+    <div id="recentErrorsList">
+      <div class="empty-state">
+        <i class="fas fa-check-circle"></i>
+        <h3>No Recent Errors</h3>
+        <p>No errors have been reported</p>
+      </div>
+    </div>
+    
+    <div class="text-center mt-3">
+      <a href="manual.html" class="btn btn-outline">
+        <i class="fas fa-plus"></i> Report New Error
+      </a>
+    </div>
+  </div>
+</div>
