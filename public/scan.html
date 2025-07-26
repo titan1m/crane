@@ -1,0 +1,40 @@
+<div class="card">
+  <div class="card-header">
+    <h2 class="card-title"><i class="fas fa-qrcode"></i> Scan Error Code</h2>
+    <button id="stopScannerBtn" class="btn btn-outline">
+      <i class="fas fa-times"></i> Cancel
+    </button>
+  </div>
+  
+  <div class="scanner-frame">
+    <video id="video" playsinline></video>
+    <div class="scanner-overlay">
+      <div class="scanner-box">
+        <div class="scanner-line"></div>
+      </div>
+    </div>
+  </div>
+  
+  <div id="scanStatus" class="text-center mb-4 text-muted">
+    <i class="fas fa-circle-notch fa-spin"></i> Initializing scanner...
+  </div>
+  
+  <div class="scanner-controls">
+    <button id="flashToggle" class="btn btn-outline">
+      <i class="fas fa-lightbulb"></i> Flash Off
+    </button>
+    <a href="manual.html" class="btn btn-outline">
+      <i class="fas fa-keyboard"></i> Manual Entry
+    </a>
+  </div>
+  
+  <div id="scanOutput" class="alert"></div>
+  
+  <a id="scanDetailsButton" href="error-details.html" class="btn btn-block hidden">
+    <i class="fas fa-info-circle"></i> View Details
+  </a>
+  
+  <a id="scanReportButton" href="report.html" class="btn btn-warning btn-block mt-2 hidden">
+    <i class="fas fa-flag"></i> Report Issue
+  </a>
+</div>
