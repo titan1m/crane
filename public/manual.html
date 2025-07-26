@@ -1,0 +1,32 @@
+<div class="card">
+  <div class="card-header">
+    <h2 class="card-title"><i class="fas fa-search"></i> Error Code Lookup</h2>
+    <a href="home.html" class="btn btn-outline">
+      <i class="fas fa-arrow-left"></i> Back
+    </a>
+  </div>
+  
+  <div class="form-group">
+    <label for="model" class="form-label">Crane Model</label>
+    <input type="text" id="model" class="form-control" placeholder="Enter crane model (e.g. ZX-5000)">
+  </div>
+  
+  <div class="form-group">
+    <label for="code" class="form-label">Error Code</label>
+    <input type="text" id="code" class="form-control" placeholder="Enter error code (e.g. E003)">
+  </div>
+  
+  <div id="output" class="alert"></div>
+  
+  <button id="detectErrorBtn" class="btn btn-block">
+    <i class="fas fa-search"></i> Lookup Error
+  </button>
+  
+  <a id="detailsButton" href="error-details.html" class="btn btn-block mt-2 hidden">
+    <i class="fas fa-info-circle"></i> View Details
+  </a>
+  
+  <a id="reportButton" href="report.html" class="btn btn-warning btn-block mt-2 hidden">
+    <i class="fas fa-flag"></i> Report Issue
+  </a>
+</div>
