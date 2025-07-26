@@ -1,0 +1,56 @@
+<div class="card">
+  <div class="card-header">
+    <h2 class="card-title"><i class="fas fa-clipboard-check"></i> Maintenance Checklists</h2>
+    <a href="home.html" class="btn btn-outline">
+      <i class="fas fa-arrow-left"></i> Back
+    </a>
+  </div>
+  
+  <div class="tab-nav">
+    <button class="tab-button active" data-tab="daily">Daily</button>
+    <button class="tab-button" data-tab="weekly">Weekly</button>
+    <button class="tab-button" data-tab="monthly">Monthly</button>
+  </div>
+  
+  <div id="dailyChecklist" class="checklist-content">
+    <div class="progress-container">
+      <div class="progress-bar" id="dailyProgress" style="width: 0%;"></div>
+    </div>
+    <div class="progress-text">
+      <span>0% completed</span>
+      <span>0 of 0 tasks</span>
+    </div>
+    <div id="dailyChecklistItems"></div>
+  </div>
+  
+  <div id="weeklyChecklist" class="checklist-content hidden">
+    <div class="progress-container">
+      <div class="progress-bar" id="weeklyProgress" style="width: 0%;"></div>
+    </div>
+    <div class="progress-text">
+      <span>0% completed</span>
+      <span>0 of 0 tasks</span>
+    </div>
+    <div id="weeklyChecklistItems"></div>
+  </div>
+  
+  <div id="monthlyChecklist" class="checklist-content hidden">
+    <div class="progress-container">
+      <div class="progress-bar" id="monthlyProgress" style="width: 0%;"></div>
+    </div>
+    <div class="progress-text">
+      <span>0% completed</span>
+      <span>0 of 0 tasks</span>
+    </div>
+    <div id="monthlyChecklistItems"></div>
+  </div>
+  
+  <div class="mt-4">
+    <button id="completeAllBtn" class="btn btn-success">
+      <i class="fas fa-check-double"></i> Complete All
+    </button>
+    <button id="generateReportBtn" class="btn btn-outline">
+      <i class="fas fa-file-export"></i> Generate Report
+    </button>
+  </div>
+</div>
