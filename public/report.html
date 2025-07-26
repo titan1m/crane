@@ -1,0 +1,59 @@
+<div class="card">
+  <div class="card-header">
+    <h2 class="card-title"><i class="fas fa-flag"></i> Report New Issue</h2>
+    <button onclick="history.back()" class="btn btn-outline">
+      <i class="fas fa-arrow-left"></i> Back
+    </button>
+  </div>
+  
+  <div class="form-group">
+    <label for="reportModel" class="form-label">Crane Model</label>
+    <input type="text" id="reportModel" class="form-control" readonly>
+  </div>
+  
+  <div class="form-group">
+    <label for="reportCode" class="form-label">Error Code</label>
+    <input type="text" id="reportCode" class="form-control" readonly>
+  </div>
+  
+  <div class="form-group">
+    <label for="issueType" class="form-label">Issue Type</label>
+    <select id="issueType" class="form-control">
+      <option value="mechanical">Mechanical</option>
+      <option value="electrical">Electrical</option>
+      <option value="hydraulic">Hydraulic</option>
+      <option value="safety">Safety</option>
+      <option value="other">Other</option>
+    </select>
+  </div>
+  
+  <div class="form-group">
+    <label for="issuePriority" class="form-label">Priority</label>
+    <select id="issuePriority" class="form-control">
+      <option value="low">Low</option>
+      <option value="medium" selected>Medium</option>
+      <option value="high">High</option>
+      <option value="critical">Critical</option>
+    </select>
+  </div>
+  
+  <div class="form-group">
+    <label for="issueDescription" class="form-label">Description</label>
+    <textarea id="issueDescription" class="form-control" placeholder="Describe the issue in detail..."></textarea>
+  </div>
+  
+  <div class="form-group">
+    <label class="form-label">Upload Images (Optional)</label>
+    <div style="border: 2px dashed var(--glass-border); border-radius: var(--radius-sm); padding: 20px; text-align: center; cursor: pointer;">
+      <i class="fas fa-cloud-upload-alt" style="font-size: 24px; color: var(--gray); margin-bottom: 10px;"></i>
+      <div>Click to upload or drag and drop</div>
+      <div class="text-muted" style="font-size: 12px;">Supports JPG, PNG (Max 5MB each)</div>
+    </div>
+  </div>
+  
+  <div id="reportOutput" class="alert"></div>
+  
+  <button id="submitReportBtn" class="btn btn-block">
+    <i class="fas fa-paper-plane"></i> Submit Report
+  </button>
+</div>
